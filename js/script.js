@@ -7,7 +7,7 @@ const eslims = [
 ];
 
 // Load the audio file
-const audioFile = '../assets/media/audio2.mp3';
+const audioFile = '../assets/media/audio.mp3';
 
 let analyser;
 let isPlaying = false;
@@ -85,7 +85,7 @@ function randomizeColorMatrix(filter) {
 
 let count = 0;
 
-const help = new PIXI.Text('Click or tap to play and again to toggle colors', {
+const help = new PIXI.Text('Tap/Click and wait to play and again to toggle colors', {
     fontFamily: 'Arial',
     fontSize: 16,
     fontWeight: 'bold',
@@ -114,6 +114,7 @@ app.stage.on('pointertap', () => {
     startAudioPlayback();
     colorsEnabled = !colorsEnabled;
     distance = 50;
+    randomizeColorMatrix(filter);
     toggleColors();
 });
 
@@ -133,13 +134,13 @@ function updateRotation() {
 
     // Update the rotation based on the average frequency
     const rotationSpeed = (averageFrequency / 100) * 0.01;
-    eslimBg.rotation += rotationSpeed * 2;
+    eslimBg.rotation += rotationSpeed * 10;
     eslim1.rotation -= rotationSpeed * 3;
     eslim3.rotation += rotationSpeed * 2;
-    eslim2.rotation += rotationSpeed * 10;
+    eslim2.rotation += rotationSpeed * 5;
     eslim4.rotation += rotationSpeed;
 
-    if (averageFrequency > 70) {
+    if (averageFrequency > 50) {
         if (toggleColorsTimeout) {
             clearTimeout(toggleColorsTimeout);
         }

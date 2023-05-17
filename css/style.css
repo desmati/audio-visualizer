@@ -1,0 +1,10 @@
+body {
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    background-color: #40beaa;
+    background-image: url(./images/bg2.png);
+    background-repeat: repeat;
+    padding: 0;
+    margin: 0;
+}

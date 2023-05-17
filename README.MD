@@ -2,6 +2,9 @@
 
 This project is a web-based audio visualization using GSAP, PIXI.js and the Web Audio API. It creates a visually dynamic experience by animating elements based on audio frequencies. The background and foreground elements which are [Persian Seven-Colored Tiles](https://www.bing.com/search?q=Persian+Seven-Colored+Tiles), rotate and scale in response to the audio input, providing an interactive and visually appealing display.
 
+## Preview the app here:
+[Demo](https://music-viz.netlify.app/)
+
 ## Features
 
 - Audio playback and visualization

@@ -8,3 +8,24 @@ body {
     padding: 0;
     margin: 0;
 }
+
+#scene3d {
+    background: transparent;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+
+}
+
+#progress {
+    height: 1rem;
+    width: 0vw;
+    top: 0;
+    left: 0;
+    z-index: 99999;
+    position: fixed;
+    background: #40beaa;
+}

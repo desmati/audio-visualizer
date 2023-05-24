@@ -12,7 +12,7 @@ const audioFile = '../assets/media/audio.mp3';
 let analyser;
 let isPlaying = false;
 let toggleColorsTimeout;
-let colorsEnabled = false;
+let colorsEnabled = true;
 
 // Create a Web Audio API context
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -25,19 +25,6 @@ const app = new PIXI.Application({
     width: window.innerWidth,
     height: window.innerHeight,
 });
-
-// Function to fetch and decode the audio file
-async function loadAudio(url) {
-    if (isPlaying) {
-        return;
-    }
-
-    const response = await fetch(url);
-    const arrayBuffer = await response.arrayBuffer();
-    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-    return audioBuffer;
-}
-
 
 document.body.appendChild(app.view);
 app.stage.interactive = true;
@@ -112,9 +99,9 @@ app.ticker.add((delta) => {
 
 app.stage.on('pointertap', () => {
     startAudioPlayback();
-    colorsEnabled = !colorsEnabled;
     distance = 50;
     randomizeColorMatrix(filter);
+    colorsEnabled = !colorsEnabled;
     toggleColors();
 });
 
@@ -124,6 +111,8 @@ function updateRotation() {
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
     analyser.getByteFrequencyData(dataArray);
+
+    render3d(dataArray, filter);
 
     // Calculate the average frequency
     let sum = 0;
@@ -158,7 +147,20 @@ function updateRotation() {
 
 // Function to handle button click and start audio playback
 async function startAudioPlayback() {
-    const buffer = await loadAudio(audioFile);
+    const buffer = await loadAudio(audioFile, (progress) => {
+        let p = document.getElementById("progress");
+
+        if (!p) {
+            return;
+        }
+
+        if (progress >= 100) {
+            p.remove();
+            return;
+        }
+        p.style.width = `${progress}vw`;
+
+    });
 
     if (isPlaying) {
         return;
@@ -181,6 +183,8 @@ async function startAudioPlayback() {
 
     source.start();
 
+    init3D('scene3d');
+
     // Call the updateRotation function to start updating the rotation
     updateRotation();
 
@@ -192,15 +196,6 @@ function toggleColors() {
     app.stage.filters = colorsEnabled ? [filter] : null;
 
 }
-
-toggleColors();
-
-// Helper function to generate random numbers within a range
-function randomBetween(min, max) {
-    return Math.random() * (max - min) + min;
-}
-
-
 
 // Create the GSAP animation
 function animate() {

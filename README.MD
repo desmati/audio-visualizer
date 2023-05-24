@@ -1,6 +1,6 @@
 # Miniature Audio Visualization
 
-This project is a web-based audio visualization using GSAP, PIXI.js and the Web Audio API. It creates a visually dynamic experience by animating elements based on audio frequencies. The background and foreground elements which are [Persian Seven-Colored Tiles](https://www.bing.com/search?q=Persian+Seven-Colored+Tiles), rotate and scale in response to the audio input, providing an interactive and visually appealing display.
+This project is a web-based audio visualization using ThreeJS, GSAP, PIXI.js and the Web Audio API. It creates a visually dynamic experience by animating elements based on audio frequencies. The background and foreground elements which are [Persian Seven-Colored Tiles](https://www.bing.com/search?q=Persian+Seven-Colored+Tiles), rotate and scale in response to the audio input, providing an interactive and visually appealing display.
 
 ## Preview the app here:
 [Demo](https://music-viz.netlify.app/)
@@ -19,12 +19,13 @@ To run the project locally, follow these steps:
 
 1. Clone the repository
 2. Navigate to the project directory
-3. Open `index.html` in a web browser using `npx http-server` or any local http server provider.
+3. Open `index.html` in a web browser using `npx http-server` or parcel or any local http server provider.
 
 ## Usage
 
 - Click or tap the screen to start audio playback and visualization.
 - The visual elements will rotate, scale, and change colors based on the audio input.
+- Click or tap on screen to toggle effects
 - Enjoy the interactive audio visualization experience!
 
 ## Customization
@@ -42,6 +43,7 @@ The project relies on the following dependencies:
 - PIXI.js: A rendering engine for creating interactive graphics.
 - GSAP: A JavaScript animation library.
 - Web Audio API: A powerful web standard for audio manipulation and visualization.
+- ThreeJS: A JavaScript library used to create animated 3D computer graphics in a web browser using WebGL
 
 ## License
 
@@ -52,3 +54,4 @@ This project is licensed under the MIT License. I'm not sure about ownership and
 - [PIXI.js](https://www.pixijs.com/)
 - [GSAP](https://greensock.com/gsap/)
 - [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
+- [ThreeJS](https://threejs.org/)

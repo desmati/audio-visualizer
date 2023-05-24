@@ -1,7 +1,7 @@
 let inited3d = false;
 //initialise simplex noise instance
 var noise = new SimplexNoise();
-let meshRoof, meshFloor, scene, group, camera, renderer;
+let meshRoof, meshFloor,ball, scene, group, camera, renderer;
 
 function init3D(viewId) {
     if (inited3d) {
@@ -39,15 +39,15 @@ function init3D(viewId) {
     meshFloor.position.set(0, -50, 0);
     group.add(meshFloor);
 
-    var icosahedronGeometry = new THREE.IcosahedronGeometry(10, 4);
+    var icosahedronGeometry = new THREE.IcosahedronGeometry(2, 1);
     var lambertMaterial = new THREE.MeshLambertMaterial({
         color: 0xff00ee,
         wireframe: true
     });
 
-    // var ball = new THREE.Mesh(icosahedronGeometry, lambertMaterial);
-    // ball.position.set(0, 0, 0);
-    // group.add(ball);
+    ball = new THREE.Mesh(icosahedronGeometry, lambertMaterial);
+    ball.position.set(0, 0, 0);
+    group.add(ball);
 
     var ambientLight = new THREE.AmbientLight(0xaaaaaa);
     scene.add(ambientLight);
@@ -55,7 +55,7 @@ function init3D(viewId) {
     var spotLight = new THREE.SpotLight(0xffffff);
     spotLight.intensity = 0.9;
     spotLight.position.set(-10, 40, 20);
-    // spotLight.lookAt(ball);
+    spotLight.lookAt(ball);
     spotLight.castShadow = true;
     scene.add(spotLight);
 
@@ -73,24 +73,6 @@ function init3D(viewId) {
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
-
-    function makeRoughBall(mesh, bassFr, treFr) {
-        mesh.geometry.vertices.forEach(function (vertex, i) {
-            var offset = mesh.geometry.parameters.radius;
-            var amp = 10;
-            var time = window.performance.now();
-            vertex.normalize();
-            var rf = 0.00001;
-            var distance = (offset + bassFr) + noise.noise3D(vertex.x + time * rf * 7, vertex.y + time * rf * 8, vertex.z + time * rf * 9) * amp * treFr;
-            vertex.multiplyScalar(distance);
-        });
-        mesh.geometry.verticesNeedUpdate = true;
-        mesh.geometry.normalsNeedUpdate = true;
-        mesh.geometry.computeVertexNormals();
-        mesh.geometry.computeFaceNormals();
-    }
-
-
 
     document.body.addEventListener('touchend', function (ev) { context.resume(); });
 
@@ -125,7 +107,7 @@ function render3d(dataArray, filter) {
     makeRoughGround(meshRoof, modulate(upperAvgFr, 0, 1, 0.5, 4), randomColor);
     makeRoughGround(meshFloor, modulate(lowerMaxFr, 0, 1, 0.5, 4), randomColor);
 
-    //   makeRoughBall(ball, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 1, 0, 4));
+      makeRoughBall(ball, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 1, 0, 4), randomColor);
 
     group.rotation.y += 0.005;
     renderer.render(scene, camera);
@@ -137,6 +119,26 @@ function makeRoughGround(mesh, distortionFr, randomColor) {
         var time = Date.now();
         var distance = (noise.noise2D(vertex.x + time * 0.0003, vertex.y + time * 0.0001) + 0) * distortionFr * amp;
         vertex.z = distance;
+    });
+
+    mesh.material.color.set(randomColor); // Set the color of the mesh material
+
+    mesh.geometry.verticesNeedUpdate = true;
+    mesh.geometry.normalsNeedUpdate = true;
+    mesh.geometry.computeVertexNormals();
+    mesh.geometry.computeFaceNormals();
+}
+
+
+function makeRoughBall(mesh, bassFr, treFr, randomColor) {
+    mesh.geometry.vertices.forEach(function (vertex, i) {
+        var offset = mesh.geometry.parameters.radius;
+        var amp = 10;
+        var time = window.performance.now();
+        vertex.normalize();
+        var rf = 0.00001;
+        var distance = (offset + bassFr) + noise.noise3D(vertex.x + time * rf * 7, vertex.y + time * rf * 8, vertex.z + time * rf * 9) * amp * treFr;
+        vertex.multiplyScalar(distance);
     });
 
     mesh.material.color.set(randomColor); // Set the color of the mesh material
